@@ -1,7 +1,15 @@
-debug = true
+[install]
+merge = true
+ignore = [
+	"README.md",
+	".gitignore",
+	".git",
+	"test",
+]
 
-[copy_from]
-home = [
+[build]
+debug = true
+files = [
 	".zshrc",
 	".config/nvim",
 ]

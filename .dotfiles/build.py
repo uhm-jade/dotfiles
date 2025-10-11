@@ -7,16 +7,17 @@ from pathlib import Path
 home = Path(os.path.expanduser("~"))
 script = Path(os.path.abspath(__file__))
 
-repo = script.parent # look a roblox reference
+repo = script.parent.parent # look a roblox reference
 
-with open("config.toml", "rb") as f:
+with open(str(script.parent / "config.toml"), "rb") as f:
     cfg = tomllib.load(f)
 
-is_debug = cfg["debug"]
-home_paths = cfg["copy_from"]["home"]
+is_debug = cfg["build"]["debug"]
+home_paths = cfg["build"]["files"]
 
-destination = repo if not is_debug
-destination = repo / "test" if is_debug
+destination = repo
+if is_debug:
+    destination = repo / "test"
 
 destination.mkdir(parents=True, exist_ok=True)
 
