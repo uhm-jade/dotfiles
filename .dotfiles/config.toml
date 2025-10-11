@@ -1,0 +1,7 @@
+debug = true
+
+[copy_from]
+home = [
+	".zshrc",
+	".config/nvim",
+]
