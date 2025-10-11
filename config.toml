@@ -4,8 +4,8 @@ files = [
 ]
 
 [install]
-debug = true
+debug = false
 merge = true
 
 [build]
-debug = true
+debug = false
