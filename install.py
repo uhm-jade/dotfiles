@@ -12,7 +12,6 @@ repo = script.parent # look a roblox reference
 with open(str(script.parent / "config.toml"), "rb") as f:
     cfg = tomllib.load(f)
 
-is_debug = cfg["install"]["debug"]
 home_paths = cfg["files"]
 
 def copy_if_not_exists(src, dst):
@@ -22,9 +21,10 @@ def copy_if_not_exists(src, dst):
 
 source = repo
 destination = home
-if is_debug:
-    source = repo / "test-build"
+if cfg["install"]["debug"]:
     destination = repo / "test-install"
+if cfg["build"]["debug"]:
+    source = repo / "test-build"
     destination.mkdir(parents=True, exist_ok=True)
 
 if cfg["install"]["merge"]:
