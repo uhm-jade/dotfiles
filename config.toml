@@ -5,7 +5,7 @@ files = [
 
 [install]
 debug = true
-merge = false
+merge = true
 
 [build]
 debug = true
