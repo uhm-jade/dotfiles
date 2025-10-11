@@ -13,7 +13,6 @@ end
 
 local M = {}
 
--- lala!!
 M.setup_general = function()
 	--[[
 		NORMAL MODE MAPPINGS
