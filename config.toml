@@ -1,0 +1,11 @@
+files = [
+	".zshrc",
+	".config/nvim",
+]
+
+[install]
+debug = true
+merge = false
+
+[build]
+debug = true
