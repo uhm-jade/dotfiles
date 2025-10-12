@@ -1,14 +1,5 @@
 return {
 	{
-		"stevearc/conform.nvim",
-		opts = {
-			formatters_by_ft = {
-				lua = { "stylua" },
-				luau = { "stylua" },
-			}
-		}
-	},
-	{
 		"lopi-py/luau-lsp.nvim",
 		opts = {
 			platform = {
