@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
+
 echo "Dotfiles requested! You've got it boss!"
 
 echo "Setting up windows specific stuff..."
@@ -49,7 +51,8 @@ if [ -n "$conflicts" ]; then
 	done
 fi
 
-dotfiles checkout
+# Configure git to ignore untracked files when showing status
+dotfiles config --local status.showUntrackedFiles no
 dotfiles status
 
 echo "Dotfiles installed! Conflicting files (if any) were moved to $BACKUP_DIR."
