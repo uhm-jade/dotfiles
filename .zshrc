@@ -1,9 +1,19 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
 
 # Add go environment variables ($HOME/go)
 if (( $+commands[go] )); then
-	export PATH=$PATH:$(go env GOPATH)/bin
+	path+=('$PATH:$(go env GOPATH)/bin')
 fi
+
+path+=('$HOME/.jai/bin')
 
 . $HOME/.cargo/env
 export PATH
@@ -110,7 +120,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias adb="$HOME/Library/Android/sdk/platform-tools/adb"
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+alias jai="$HOME/.jai/bin/jai"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
