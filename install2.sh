@@ -51,6 +51,9 @@ if [ -n "$conflicts" ]; then
 	done
 fi
 
+# Hide untracked files
+dotfiles config --local status.showUntrackedFiles no
+
 echo "Pulling latest changes from GitHub..."
 
 # Save local changes (if any) temporarily
@@ -62,8 +65,6 @@ dotfiles pull --rebase
 # Restore stashed changes
 dotfiles stash pop || true
 
-# Configure git to ignore untracked files when showing status
-dotfiles config --local status.showUntrackedFiles no
-dotfiles status
 
-echo "Dotfiles installed! Conflicting files (if any) were moved to $BACKUP_DIR."
+echo "Dotfiles are up to date! Conflicting files (if any) were also moved to $BACKUP_DIR.""
+dotfiles status
