@@ -65,6 +65,5 @@ dotfiles pull --rebase
 # Restore stashed changes
 dotfiles stash pop || true
 
-
-echo "Dotfiles are up to date! Conflicting files (if any) were also moved to $BACKUP_DIR.""
+echo "Dotfiles are up to date! Conflicting files (if any) were also moved to $BACKUP_DIR."
 dotfiles status
