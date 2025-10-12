@@ -47,9 +47,20 @@ if [ -n "$conflicts" ]; then
 	for file in $conflicts; do
 		mkdir -p "$(dirname "$BACKUP_DIR/$file")"
 
-		mv "$HOME/$file" "$BACKUP_DIR/$file"
+		cp "$HOME/$file" "$BACKUP_DIR/$file"
 	done
 fi
+
+echo "Pulling latest changes from GitHub..."
+
+# Save local changes (if any) temporarily
+dotfiles stash push -m "Auto-stash before pull" || true
+
+# Pull from GitHub
+dotfiles pull --rebase
+
+# Restore stashed changes
+dotfiles stash pop || true
 
 # Configure git to ignore untracked files when showing status
 dotfiles config --local status.showUntrackedFiles no
