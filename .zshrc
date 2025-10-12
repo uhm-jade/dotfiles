@@ -1,7 +1,10 @@
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# path+=('$HOME/.cargo/env:') #Nevermind lets use this next line.
+# Add go environment variables ($HOME/go)
+if (( $+commands[go] )); then
+	export PATH=$PATH:$(go env GOPATH)/bin
+fi
+
 . $HOME/.cargo/env
 export PATH
 
@@ -108,3 +111,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles --work-tree=$HOME"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
