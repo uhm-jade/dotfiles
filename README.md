@@ -1,7 +1,6 @@
 # my files
 here just take em
 
-## install
-`python3 install.py`
-
-see `config.toml` for file list
+## easy install
+this will do a bare clone of the git repo straight into your home directory. watch out!
+`curl -o- https://raw.githubusercontent.com/uhm-jade/dotfiles/main/install.sh | bash`

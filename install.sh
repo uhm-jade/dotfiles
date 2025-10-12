@@ -1,2 +1,3 @@
 #!/bin/bash
-git clone https://github.com/uhm-jade/dotfiles.git ~/.dotfiles
+echo "lala!"
+# git clone --bare https://github.com/uhm-jade/dotfiles.git $HOME/.dotfiles && source .zshrc
