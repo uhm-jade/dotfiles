@@ -1,3 +1,12 @@
+# Do windows specific stuff
+if (( $+commands[explorer.exe] )); then
+	user_dir=$(cmd.exe /c echo %username%)
+	#mkdir -p $user_dir/AppData/Roaming/alacritty/alacritty.toml
+	echo -p $user_dir/AppData/Roaming/alacritty/alacritty.toml
+
+	# cp .alacritty 
+fi
+
 # Check for Powerlevel10k and install it
 if [ ! -d ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k ]; then
 	echo "powerlevel10k theme not found! installing..."
