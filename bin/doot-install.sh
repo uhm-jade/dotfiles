@@ -1,9 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
-echo "Dotfiles requested! You've got it boss!"
+# Regular colors
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
 
-echo "Setting up windows specific stuff..."
+BLUE="\033[0;34m"
+MAGENTA="\033[0;35m"
+CYAN="\033[0;36m"
+WHITE="\033[0;37m"
+
+RESET="\033[0m" # reset color to default
+
+echo "${WHITE}Setting up windows specific stuff...${RESET}"
 if command -v cmd.exe >/dev/null 2>&1; then
 	echo "WINDOWS USER DETECTED! 🚩🚩🚩"
 
@@ -21,7 +31,7 @@ if command -v cmd.exe >/dev/null 2>&1; then
 	fi
 fi
 
-echo "Installing dotfiles..."
+echo "${WHITE}Installing dotfiles...${RESET}"
 
 DOTFILES_REPO="https://github.com/uhm-jade/dotfiles.git"
 
@@ -42,7 +52,7 @@ mkdir -p "$BACKUP_DIR"
 conflicts=$(dotfiles checkout 2>&1 | grep "^\s" | awk '{print $1}')
 
 if [ -n "$conflicts" ]; then
-	echo "Backing up existing files to $BACKUP_DIR:"
+	echo "${CYAN}Backing up existing files to $BACKUP_DIR:${RESET}"
 	echo "$conflicts"
 	for file in $conflicts; do
 		mkdir -p "$(dirname "$BACKUP_DIR/$file")"
@@ -54,7 +64,7 @@ fi
 # Hide untracked files
 dotfiles config --local status.showUntrackedFiles no
 
-echo "Pulling latest changes from GitHub..."
+echo "${GREEN}Pulling latest changes from GitHub...${RESET}"
 
 # Save local changes (if any) temporarily
 dotfiles stash push -m "Auto-stash before pull" || true
@@ -65,7 +75,8 @@ dotfiles pull --rebase
 # Restore stashed changes
 dotfiles stash pop || true
 
-echo "Dotfiles are up to date! Conflicting files (if any) were also moved to $BACKUP_DIR."
+echo "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
+echo "🎺 doot"
 
 # TODO
 # Set upstream remote automatically:
