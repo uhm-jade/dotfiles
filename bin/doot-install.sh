@@ -35,14 +35,15 @@ fi
 echo -e "${CYAN}Installing dotfiles...${RESET}"
 
 read -rp "Enter your dotfiles Git repository URL: " repo_url
-repo_url=${repo_url:-https://github.com/uhm-jade/dotfiles.git}
+repo_url=${repo_url}
 
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup"
 
 # Clone the bare repo if it doesn't exist
 if [ ! -d "$DOTFILES_DIR" ]; then
-	git clone --bare "$repo_url" "$DOTFILES_DIR"
+	# git clone --bare "$repo_url" "$DOTFILES_DIR"
+	git clone --bare "https://github.com/uhm-jade/dotfiles.git" "$DOTFILES_DIR"
 fi
 
 # Aliasing stuff need to get rid of this tbh
@@ -106,6 +107,8 @@ echo -e "  ${YELLOW}doot checkout${RESET}   - restore tracked dotfiles and backu
 echo -e "${CYAN}and any other git command, e.g. ${YELLOW}doot log --oneline${RESET}${CYAN}.${RESET}"
 
 # TODO for distribution
+# - extract repo from url and then use the version that has the .git when cloning
+# - make sure it doesn't clone mine (i am doing this so i can give it to aidan)
 # - get rid of dotfiles aliasing stuff, just use doot
 # - get rid of funny windows symlinking stuff
 # - move everything into its own repo
