@@ -34,18 +34,24 @@ fi
 
 echo -e "${CYAN}Installing dotfiles...${RESET}"
 
-DOTFILES_REPO="https://github.com/uhm-jade/dotfiles.git"
+read -rp "Enter your dotfiles Git repository URL: " repo_url
+repo_url=${repo_url:-https://github.com/uhm-jade/dotfiles.git}
 
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup"
 
 # Clone the bare repo if it doesn't exist
 if [ ! -d "$DOTFILES_DIR" ]; then
-	git clone --bare "$DOTFILES_REPO" "$DOTFILES_DIR"
+	git clone --bare "$repo_url" "$DOTFILES_DIR"
 fi
 
+# Aliasing stuff need to get rid of this tbh
 alias dotfiles="/usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME"
 shopt -s expand_aliases # For script to use alias
+
+# Configure repo
+dotfiles config --local status.showUntrackedFiles no
+dotfiles remote set-url origin "$repo_url"
 
 # Backup any existing dotfiles that would be overwritten
 mkdir -p "$BACKUP_DIR"
@@ -53,7 +59,7 @@ mkdir -p "$BACKUP_DIR"
 conflicts=$(dotfiles checkout 2>&1 | grep "^\s" | awk '{print $1}')
 
 if [ -n "$conflicts" ]; then
-	echo -e "${CYAN}Backing up existing files to $BACKUP_DIR:${RESET}"
+	echo -e "${YELLOW}Backing up existing files to $BACKUP_DIR:${RESET}"
 	echo "$conflicts"
 	for file in $conflicts; do
 		mkdir -p "$(dirname "$BACKUP_DIR/$file")"
@@ -62,25 +68,47 @@ if [ -n "$conflicts" ]; then
 	done
 fi
 
-# Hide untracked files
-dotfiles config --local status.showUntrackedFiles no
-
-echo -e "${GREEN}Pulling latest changes from GitHub...${RESET}"
+echo -e "${CYAN}Pulling latest changes from GitHub...${RESET}"
 
 # Save local changes (if any) temporarily
 dotfiles stash push -m "Auto-stash before pull" || true
 
 # Pull from GitHub
 dotfiles pull --rebase
+echo -e "${CYAN}Downloaded repo files...${RESET}"
 
 # Restore stashed changes
 dotfiles stash pop || true
 
 echo -e "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
-sleep 0.5
+
+for dots in . .. ...; do
+	echo -ne "$dots\r" # prints dots and returns cursor to start
+	sleep 0.4
+	echo # then move to a new line
+done
+echo -e "\r  ${YELLOW}🎺 doot${RESET}"
+
+sleep 0.4
+
 echo
-echo -e "${GREEN}🎺 doot${RESET}"
+
 echo
+echo -e "${CYAN}how to doot:${RESET}"
+echo
+echo -e "  ${YELLOW}doot add <file>${RESET} - add a file to your dotfiles repo"
+
+echo -e "  ${YELLOW}doot pull${RESET}       - update your dotfiles from GitHub"
+echo -e "  ${YELLOW}doot push${RESET}       - push your local edits to GitHub"
+echo -e "  ${YELLOW}doot status${RESET}     - show changes to tracked dotfiles"
+echo -e "  ${YELLOW}doot checkout${RESET}   - restore tracked dotfiles and backup conflicts"
+
+echo -e "${CYAN}and any other git command, e.g. ${YELLOW}doot log --oneline${RESET}${CYAN}.${RESET}"
+
+# TODO for distribution
+# - get rid of dotfiles aliasing stuff, just use doot
+# - get rid of funny windows symlinking stuff
+# - move everything into its own repo
 
 # TODO
 # Set upstream remote automatically:
