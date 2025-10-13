@@ -38,13 +38,21 @@ DEFAULT_BRANCH="main"
 
 echo -e "${CYAN}Installing dotfiles...${RESET}"
 
-read -rp "Enter your dotfiles Git repository URL: " repo_url
-repo_url=${repo_url:-https://github.com/uhm-jade/dotfiles.git}
+while true; do
+	read -p "Enter the URL of the Git repository for your dotfiles: " repo_url
+
+	if [[ "$repo_url" =~ ^(https://|git@).+\.git$ ]]; then
+		echo "Using repository: $repo_url"
+		break
+	else
+		echo "Invalid Git URL. Please enter a URL ending with .git or a git@ URL."
+	fi
+done
 
 # Clone the bare repo if it doesn't exist
 if [ ! -d "$DOTFILES_DIR" ]; then
-	# git clone --bare "$repo_url" "$DOTFILES_DIR"
-	git clone --bare "https://github.com/uhm-jade/dotfiles.git" "$DOTFILES_DIR"
+	git clone --bare "$repo_url" "$DOTFILES_DIR"
+	# git clone --bare "https://github.com/uhm-jade/dotfiles.git" "$DOTFILES_DIR"
 fi
 
 # Make shortcut git command
@@ -84,7 +92,7 @@ if [ -n "$conflicts" ]; then
 	done
 fi
 
-echo -e "${CYAN}Pulling latest changes from GitHub...${RESET}"
+echo -e "${CYAN}Pulling latest changes...${RESET}"
 
 # Save local changes (if any) temporarily
 $GIT stash push -m "Auto-stash before pull" || true

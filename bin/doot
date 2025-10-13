@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 DOTFILES_DIR="$HOME/.dotfiles"
 
-dotfiles() {
+wrapped_cmd() {
 	/usr/bin/git --git-dir="$DOTFILES_DIR" --work-tree="$HOME" "$@"
 }
 
@@ -9,22 +9,22 @@ doot() {
 
 	case "$1" in
 	status)
-		dotfiles status
+		wrapped_cmd status
 		;;
 
 	pull)
-		dotfiles stash push -m "Auto-stash before pull" || true
-		dotfiles pull --rebase
-		dotfiles stash pop || true
+		wrapped_cmd stash push -m "Auto-stash before pull" || true
+		wrapped_cmd pull --rebase
+		wrapped_cmd stash pop || true
 		;;
 	checkout)
-		dotfiles checkout
+		wrapped_cmd checkout
 		;;
 	*)
-		echo "Usage: doot {status|pull|checkout|<git-args>}"
+		# echo "Usage: doot {status|pull|checkout|<git-args>}"
 
-		echo "All other arguments are passed directly to git"
-		dotfiles "$@"
+		# echo "All other arguments are passed directly to git"
+		wrapped_cmd "$@"
 		;;
 
 	esac
