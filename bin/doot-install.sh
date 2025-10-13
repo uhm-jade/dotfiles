@@ -35,7 +35,7 @@ fi
 echo -e "${CYAN}Installing dotfiles...${RESET}"
 
 read -rp "Enter your dotfiles Git repository URL: " repo_url
-repo_url=${repo_url}
+repo_url=${repo_url:-https://github.com/uhm-jade/dotfiles.git}
 
 DOTFILES_DIR="$HOME/.dotfiles"
 BACKUP_DIR="$HOME/.dotfiles-backup"
