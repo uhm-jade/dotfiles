@@ -1,10 +1,34 @@
 #!/usr/bin/env bash
+DOTFILES_DIR="$HOME/.dotfiles"
 
 dotfiles() {
 	/usr/bin/git --git-dir="$DOTFILES_DIR" --work-tree="$HOME" "$@"
 }
 
-# Existing repo → update
-dotfiles stash push -m "Auto-stash before pull" || true
-dotfiles pull --rebase
-dotfiles stash pop || true
+doot() {
+
+	case "$1" in
+	status)
+		dotfiles status
+		;;
+
+	pull)
+		dotfiles stash push -m "Auto-stash before pull" || true
+		dotfiles pull --rebase
+		dotfiles stash pop || true
+		;;
+	checkout)
+		dotfiles checkout
+		;;
+	*)
+		echo "Usage: doot {status|pull|checkout|<git-args>}"
+
+		echo "All other arguments are passed directly to git"
+		dotfiles "$@"
+		;;
+
+	esac
+}
+
+# Call the dispatcher with all script arguments
+doot "$@"

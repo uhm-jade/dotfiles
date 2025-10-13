@@ -66,3 +66,28 @@ dotfiles pull --rebase
 dotfiles stash pop || true
 
 echo "Dotfiles are up to date! Conflicting files (if any) were also moved to $BACKUP_DIR."
+
+# TODO
+# Set upstream remote automatically:
+#
+# if ! dotfiles remote | grep -q origin; then
+#     echo -e "${CYAN}Setting remote origin...${RESET}"
+#     dotfiles remote add origin https://github.com/uhm-jade/dotfiles.git
+# fi
+# dotfiles branch --set-upstream-to=origin/main main 2>/dev/null || true
+#
+# Need a config file first tho
+# Ideally have an installer that prompts you for your git repo
+
+# TODO:
+# Find existing .zshrc and .bashrc for tab completions
+# And write this to it
+# _doot_completions() {
+#     local cur=${COMP_WORDS[COMP_CWORD]}
+#
+#     COMPREPLY=($(compgen -W "status pull checkout stash add commit push" -- "$cur"))
+# }
+#
+# complete -F _doot_completions doot
+#
+# Ideally prompt the user before-hand asking if they want it (warning them it will update their .zshrc/.bashrc)
