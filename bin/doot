@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+dotfiles() {
+	/usr/bin/git --git-dir="$DOTFILES_DIR" --work-tree="$HOME" "$@"
+}
+
+# Existing repo → update
+dotfiles stash push -m "Auto-stash before pull" || true
+dotfiles pull --rebase
+dotfiles stash pop || true
