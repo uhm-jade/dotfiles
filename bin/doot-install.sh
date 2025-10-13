@@ -13,9 +13,9 @@ WHITE="\033[0;37m"
 
 RESET="\033[0m" # reset color to default
 
-echo -e "${WHITE}Setting up windows specific stuff...${RESET}"
+echo -e "${CYAN}Setting up windows specific stuff...${RESET}"
 if command -v cmd.exe >/dev/null 2>&1; then
-	echo -e "WINDOWS USER DETECTED! 🚩🚩🚩"
+	echo -e "${RED}WINDOWS USER DETECTED! 🚩🚩🚩${RESET}"
 
 	if [ -d "$HOME/user" ]; then
 		echo "Found link to windows user directory"
@@ -30,7 +30,7 @@ if command -v cmd.exe >/dev/null 2>&1; then
 	fi
 fi
 
-echo -e "${WHITE}Installing dotfiles...${RESET}"
+echo -e "${CYAN}Installing dotfiles...${RESET}"
 
 DOTFILES_REPO="https://github.com/uhm-jade/dotfiles.git"
 
@@ -75,7 +75,7 @@ dotfiles pull --rebase
 dotfiles stash pop || true
 
 echo -e "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
-echo -e "${GREEN}🎺 doot"
+echo -e "${GREEN}🎺 doot${RESET}"
 
 # TODO
 # Set upstream remote automatically:
