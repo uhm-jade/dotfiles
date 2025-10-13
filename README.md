@@ -2,4 +2,4 @@
 here just take em
 
 ## easy install
-`curl -o- https://raw.githubusercontent.com/uhm-jade/dotfiles/bin/doot/doot-install.sh | bash`
+`curl -fsSL https://raw.githubusercontent.com/uhm-jade/dotfiles/main/bin/doot-install.sh | bash`
