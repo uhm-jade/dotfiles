@@ -77,7 +77,10 @@ dotfiles pull --rebase
 dotfiles stash pop || true
 
 echo -e "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
-echo -e "${BOLD_WHITE}🎺 doot${RESET}"
+sleep 0.5
+echo
+echo -e "${GREEN}🎺 doot${RESET}"
+echo
 
 # TODO
 # Set upstream remote automatically:
