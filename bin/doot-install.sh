@@ -32,13 +32,14 @@ if command -v cmd.exe >/dev/null 2>&1; then
 	fi
 fi
 
+DOTFILES_DIR="$HOME/.dotfiles"
+BACKUP_DIR="$HOME/.dotfiles-backup"
+DEFAULT_BRANCH="main"
+
 echo -e "${CYAN}Installing dotfiles...${RESET}"
 
 read -rp "Enter your dotfiles Git repository URL: " repo_url
 repo_url=${repo_url:-https://github.com/uhm-jade/dotfiles.git}
-
-DOTFILES_DIR="$HOME/.dotfiles"
-BACKUP_DIR="$HOME/.dotfiles-backup"
 
 # Clone the bare repo if it doesn't exist
 if [ ! -d "$DOTFILES_DIR" ]; then
@@ -46,18 +47,32 @@ if [ ! -d "$DOTFILES_DIR" ]; then
 	git clone --bare "https://github.com/uhm-jade/dotfiles.git" "$DOTFILES_DIR"
 fi
 
-# Aliasing stuff need to get rid of this tbh
-alias dotfiles="/usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME"
-shopt -s expand_aliases # For script to use alias
+# Make shortcut git command
+GIT="/usr/bin/git --git-dir=$DOTFILES_DIR --work-tree=$HOME"
 
 # Configure repo
-dotfiles config --local status.showUntrackedFiles no
-dotfiles remote set-url origin "$repo_url"
+echo -e "${CYAN}Configuring your dotfiles repository...${RESET}"
+$GIT config --local status.showUntrackedFiles no
+$GIT remote set-url origin "$repo_url" || true
 
 # Backup any existing dotfiles that would be overwritten
 mkdir -p "$BACKUP_DIR"
 
-conflicts=$(dotfiles checkout 2>&1 | grep "^\s" | awk '{print $1}')
+# Checkout default branch safely
+echo -e "${CYAN}Checking out dotfiles...${RESET}"
+# Try main first, fallback to master
+if $GIT show-ref --verify --quiet refs/heads/$DEFAULT_BRANCH; then
+	echo -e "${CYAN}Found branch $DEFAULT_BRANCH...${RESET}"
+else
+	echo -e "${YELLOW}Branch $DEFAULT_BRANCH does not exist locally. Attempting to fetch from origin...${RESET}"
+	$GIT fetch origin "$DEFAULT_BRANCH":"$DEFAULT_BRANCH" || true
+fi
+
+# Set upstream
+$GIT branch --set-upstream-to="origin/$DEFAULT_BRANCH" "$DEFAULT_BRANCH" 2>/dev/null || true
+
+# Find conflicts by checking out to branch, and then backing up those files
+conflicts=$($GIT checkout "$DEFAULT_BRANCH" 2>&1 | grep "^\s" | awk '{print $1}')
 
 if [ -n "$conflicts" ]; then
 	echo -e "${YELLOW}Backing up existing files to $BACKUP_DIR:${RESET}"
@@ -72,14 +87,14 @@ fi
 echo -e "${CYAN}Pulling latest changes from GitHub...${RESET}"
 
 # Save local changes (if any) temporarily
-dotfiles stash push -m "Auto-stash before pull" || true
+$GIT stash push -m "Auto-stash before pull" || true
 
 # Pull from GitHub
-dotfiles pull --rebase
+$GIT pull --rebase || true
 echo -e "${CYAN}Downloaded repo files...${RESET}"
 
 # Restore stashed changes
-dotfiles stash pop || true
+$GIT stash pop || true
 
 echo -e "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
 
@@ -109,7 +124,6 @@ echo -e "${CYAN}and any other git command, e.g. ${YELLOW}doot log --oneline${RES
 # TODO for distribution
 # - extract repo from url and then use the version that has the .git when cloning
 # - make sure it doesn't clone mine (i am doing this so i can give it to aidan)
-# - get rid of dotfiles aliasing stuff, just use doot
 # - get rid of funny windows symlinking stuff
 # - move everything into its own repo
 
