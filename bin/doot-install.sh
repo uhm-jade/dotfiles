@@ -11,22 +11,24 @@ MAGENTA="\033[0;35m"
 CYAN="\033[0;36m"
 WHITE="\033[0;37m"
 
+BOLD_WHITE="\033[1;37m"
+BOLD_RED="\033[1;31m"
+
 RESET="\033[0m" # reset color to default
 
 echo -e "${CYAN}Setting up windows specific stuff...${RESET}"
 if command -v cmd.exe >/dev/null 2>&1; then
-	echo -e "${RED}WINDOWS USER DETECTED! 🚩🚩🚩${RESET}"
+	echo -e "${BOLD_RED}WINDOWS USER DETECTED! 🚩🚩🚩${RESET}"
 
 	if [ -d "$HOME/user" ]; then
-		echo "Found link to windows user directory"
+		echo -e "${GREEN}Found link to windows user directory${RESET}"
 	else
-		echo "Creating link to windows user directory..."
-		echo ""
+		echo -e "${CYAN}Creating link to windows user directory...${RESET}"
 		user_name=$(cmd.exe /c echo %username%)
 		user_name=${user_name%$'\r'} # remove trailing carriage return
 		user_dir="/mnt/c/Users/$user_name"
 		ln -s "$user_dir" "${HOME}/user"
-		echo "Link created in ${HOME}/user"
+		echo -e "${GREEN}Link created in ${HOME}/user${RESET}"
 	fi
 fi
 
@@ -75,7 +77,7 @@ dotfiles pull --rebase
 dotfiles stash pop || true
 
 echo -e "${CYAN}Conflicting files moved to $BACKUP_DIR.${RESET}"
-echo -e "${GREEN}🎺 doot${RESET}"
+echo -e "${BOLD_WHITE}🎺 doot${RESET}"
 
 # TODO
 # Set upstream remote automatically:
