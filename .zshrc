@@ -1,14 +1,12 @@
 # Do windows specific stuff
+#
+# Sync alacritty.toml
 if [ -f "$HOME/.alacritty.toml" ]; then
 	if [[ -L "$HOME/user" ]]; then
 		mkdir -p "$HOME/user/AppData/Roaming/alacritty"
 
 		cp "$HOME/.alacritty.toml" "$HOME/user/AppData/Roaming/alacritty/alacritty.toml"
-	else
-		echo "No windows user directory symlink found"
 	fi
-else
-	echo "No .alacritty.toml found"
 fi
 
 # Check for Powerlevel10k and install it
