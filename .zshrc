@@ -1,10 +1,14 @@
 # Do windows specific stuff
-if (( $+commands[explorer.exe] )); then
-	user_dir=$(cmd.exe /c echo %username%)
-	#mkdir -p $user_dir/AppData/Roaming/alacritty/alacritty.toml
-	echo -p $user_dir/AppData/Roaming/alacritty/alacritty.toml
+if [ -f "$HOME/.alacritty.toml" ]; then
+	if [[ -L "$HOME/user" ]]; then
+		mkdir -p "$HOME/user/AppData/Roaming/alacritty"
 
-	# cp .alacritty 
+		cp "$HOME/.alacritty.toml" "$HOME/user/AppData/Roaming/alacritty/alacritty.toml"
+	else
+		echo "No windows user directory symlink found"
+	fi
+else
+	echo "No .alacritty.toml found"
 fi
 
 # Check for Powerlevel10k and install it
@@ -28,9 +32,14 @@ if (( $+commands[go] )); then
 	path+=('$PATH:$(go env GOPATH)/bin')
 fi
 
+# Add jai bin
 path+=('$HOME/.jai/bin')
 
-. $HOME/.cargo/env
+# Add cargo env
+if [ -f "$HOME/.cargo/env" ]; then
+	. $HOME/.cargo/env
+fi
+
 export PATH
 
 # Path to your Oh My Zsh installation.
