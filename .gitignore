@@ -16,3 +16,6 @@ Thumbs.db
 # testing stuff
 test-build
 test-install
+
+# Lock files
+**/lazy-lock.json
